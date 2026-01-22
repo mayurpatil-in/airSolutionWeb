@@ -63,13 +63,50 @@ const Navbar = () => {
         </div>
 
         <div className="container mx-auto px-4 flex justify-between items-center">
-          {/* Logo */}
-          <Link to="/" className="flex items-center group">
-            <img
-              src={logo}
-              alt="Vision Air Solution"
-              className="h-12 md:h-14 w-auto object-contain group-hover:scale-105 transition-transform duration-300"
-            />
+          {/* Logo - Enhanced with Animations */}
+          <Link to="/" className="flex items-center group relative">
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              whileHover={{
+                scale: 1.05,
+                rotate: [0, -2, 2, -2, 0],
+              }}
+              className="relative"
+            >
+              {/* Animated glow effect */}
+              <motion.div
+                className="absolute inset-0 bg-gradient-to-r from-primary/20 via-blue-400/20 to-cyan-400/20 rounded-full blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.3, 0.6, 0.3],
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+              />
+
+              {/* Logo with floating animation */}
+              <motion.img
+                src={logo}
+                alt="Vision Air Solution"
+                className="h-12 md:h-14 w-auto object-contain relative z-10"
+                animate={{
+                  y: [0, -5, 0],
+                }}
+                transition={{
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                whileHover={{
+                  filter: "drop-shadow(0 0 8px rgba(59, 130, 246, 0.5))",
+                }}
+              />
+            </motion.div>
           </Link>
 
           {/* Desktop Nav */}
