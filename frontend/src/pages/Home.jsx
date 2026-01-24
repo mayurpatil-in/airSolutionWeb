@@ -17,6 +17,9 @@ import {
   TrendingUp,
   Zap,
   Target,
+  Headphones,
+  Clock,
+  Briefcase,
 } from "lucide-react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
@@ -427,14 +430,78 @@ const Home = () => {
       </section>
 
       {/* Statistics Section */}
-      <section className="py-24 bg-gradient-to-r from-primary via-blue-600 to-primary-dark text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
+      {/* Statistics Section - Redesigned */}
+      <section className="py-24 relative overflow-hidden">
+        {/* Dynamic Background */}
+        <div className="absolute inset-0 bg-slate-900">
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-900/50 via-slate-900 to-slate-900"></div>
+          <div
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "radial-gradient(circle at 2px 2px, rgba(255,255,255,0.15) 1px, transparent 0)",
+              backgroundSize: "40px 40px",
+            }}
+          ></div>
+
+          {/* Animated Glow Orbs */}
+          <motion.div
+            className="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-500/20 rounded-full blur-[100px]"
+            animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 8, repeat: Infinity }}
+          />
+          <motion.div
+            className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-cyan-500/10 rounded-full blur-[100px]"
+            animate={{ scale: [1.2, 1, 1.2], opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 10, repeat: Infinity }}
+          />
+        </div>
+
         <div className="container mx-auto px-4 relative z-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <StatItem number="10+" label="Years Experience" delay={0} />
-            <StatItem number="500+" label="Projects Completed" delay={0.1} />
-            <StatItem number="100%" label="Client Satisfaction" delay={0.2} />
-            <StatItem number="24/7" label="Support Service" delay={0.3} />
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-black text-white mb-6">
+              Our Impact in Numbers
+            </h2>
+            <p className="text-blue-200 text-lg max-w-2xl mx-auto font-light">
+              Transforming commercial kitchens with verifiable excellence and
+              dedication
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            <StatItem
+              icon={<Clock size={32} />}
+              number="10+"
+              label="Years Experience"
+              delay={0}
+              color="blue"
+            />
+            <StatItem
+              icon={<Briefcase size={32} />}
+              number="500+"
+              label="Projects Completed"
+              delay={0.1}
+              color="cyan"
+            />
+            <StatItem
+              icon={<Star size={32} />}
+              number="100%"
+              label="Client Satisfaction"
+              delay={0.2}
+              color="yellow"
+            />
+            <StatItem
+              icon={<Headphones size={32} />}
+              number="24/7"
+              label="Support Service"
+              delay={0.3}
+              color="purple"
+            />
           </div>
         </div>
       </section>
@@ -716,10 +783,25 @@ const TestimonialCard = ({ quote, author, position, delay }) => (
   </motion.div>
 );
 
-const StatItem = ({ number, label, delay }) => {
+const StatItem = ({ number, label, delay, icon, color = "blue" }) => {
   const [count, setCount] = React.useState(0);
   const [hasAnimated, setHasAnimated] = React.useState(false);
   const ref = React.useRef(null);
+
+  // Color mappings
+  const colorStyles = {
+    blue: "from-blue-500 to-blue-600",
+    cyan: "from-cyan-400 to-blue-500",
+    yellow: "from-yellow-400 to-orange-500",
+    purple: "from-purple-500 to-indigo-500",
+  };
+
+  const glowStyles = {
+    blue: "group-hover:shadow-blue-500/50",
+    cyan: "group-hover:shadow-cyan-500/50",
+    yellow: "group-hover:shadow-yellow-500/50",
+    purple: "group-hover:shadow-purple-500/50",
+  };
 
   React.useEffect(() => {
     const observer = new IntersectionObserver(
@@ -727,11 +809,11 @@ const StatItem = ({ number, label, delay }) => {
         if (entries[0].isIntersecting && !hasAnimated) {
           setHasAnimated(true);
 
-          // Extract numeric value from string like "500+" or "100%"
-          const numericValue = parseInt(number.replace(/\D/g, "")) || 0;
-          const suffix = number.replace(/[0-9]/g, "");
+          if (typeof number === "string" && number.includes("/")) return;
 
-          const duration = 2000; // 2 seconds
+          const numericValue = parseInt(number.replace(/\D/g, "")) || 0;
+
+          const duration = 2000;
           const steps = 60;
           const increment = numericValue / steps;
           let current = 0;
@@ -763,8 +845,8 @@ const StatItem = ({ number, label, delay }) => {
     };
   }, [number, hasAnimated]);
 
-  // Format the display number with suffix
   const displayNumber = () => {
+    if (typeof number === "string" && number.includes("/")) return number;
     const suffix = number.replace(/[0-9]/g, "");
     return count + suffix;
   };
@@ -772,21 +854,35 @@ const StatItem = ({ number, label, delay }) => {
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, scale: 0.5 }}
+      initial={{ opacity: 0, scale: 0.8 }}
       whileInView={{ opacity: 1, scale: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay }}
-      className="p-6"
+      whileHover={{ y: -5 }}
+      className={`group relative p-6 rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 overflow-hidden transition-all duration-300 hover:border-white/20 hover:shadow-xl ${glowStyles[color]}`}
     >
-      <motion.div
-        className="text-5xl md:text-6xl font-black mb-3 text-white"
-        animate={{ scale: hasAnimated ? [1, 1.1, 1] : 1 }}
-        transition={{ duration: 0.3, delay: 0.5 }}
-      >
-        {displayNumber()}
-      </motion.div>
-      <div className="text-blue-200 text-sm md:text-base uppercase tracking-wider font-semibold">
-        {label}
+      <div
+        className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r ${colorStyles[color]} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+      />
+
+      <div className="flex flex-col items-center">
+        <div
+          className={`mb-4 p-3 rounded-full bg-white/5 text-white group-hover:bg-white/10 transition-colors duration-300`}
+        >
+          {icon}
+        </div>
+
+        <motion.div
+          className="text-4xl md:text-5xl font-black mb-2 text-white tracking-tight"
+          animate={{ scale: hasAnimated ? [1, 1.1, 1] : 1 }}
+          transition={{ duration: 0.3, delay: 0.5 }}
+        >
+          {displayNumber()}
+        </motion.div>
+
+        <div className="text-gray-400 text-sm md:text-base font-medium uppercase tracking-wider">
+          {label}
+        </div>
       </div>
     </motion.div>
   );
