@@ -29,7 +29,6 @@ const Home = () => {
 
   // Parallax effects
   const heroY = useTransform(scrollY, [0, 500], [0, 150]);
-  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
@@ -131,7 +130,7 @@ const Home = () => {
 
         <motion.div
           className="container mx-auto px-4 relative z-10"
-          style={{ y: heroY, opacity: heroOpacity }}
+          style={{ y: heroY }}
         >
           <div className="max-w-5xl mx-auto text-center">
             <motion.div
@@ -212,36 +211,6 @@ const Home = () => {
             </motion.div>
           </div>
         </motion.div>
-
-        {/* Animated Wave Divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <motion.svg
-            viewBox="0 0 1440 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, delay: 0.5 }}
-          >
-            <motion.path
-              d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z"
-              fill="white"
-              animate={{
-                d: [
-                  "M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z",
-                  "M0 10L60 16.7C120 23 240 37 360 40C480 43 600 37 720 33.3C840 30 960 30 1080 36.7C1200 43 1320 57 1380 63.3L1440 70V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V10Z",
-                  "M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z",
-                ],
-              }}
-              transition={{
-                duration: 8,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
-          </motion.svg>
-        </div>
       </section>
 
       {/* Trust Badges */}

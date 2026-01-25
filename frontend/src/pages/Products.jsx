@@ -122,11 +122,11 @@ const Products = () => {
   return (
     <div className="flex flex-col w-full overflow-hidden">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900 text-white pt-32 pb-20 overflow-hidden">
+      <section className="relative bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 text-white pt-32 pb-20 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-mesh opacity-40"></div>
-        <div className="absolute top-10 right-10 w-64 h-64 bg-blue-500/20 rounded-full blur-3xl animate-float"></div>
+        <div className="absolute top-10 right-10 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl animate-float"></div>
         <div
-          className="absolute bottom-10 left-10 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-float"
+          className="absolute bottom-10 left-10 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl animate-float"
           style={{ animationDelay: "2s" }}
         ></div>
 
@@ -138,7 +138,7 @@ const Products = () => {
             className="text-5xl md:text-7xl font-black mb-6"
           >
             Our{" "}
-            <span className="gradient-text bg-gradient-to-r from-blue-400 to-cyan-300">
+            <span className="gradient-text bg-gradient-to-r from-cyan-400 to-teal-300">
               Products
             </span>
           </motion.h1>
@@ -146,26 +146,11 @@ const Products = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto font-light"
+            className="text-xl md:text-2xl text-cyan-100 max-w-3xl mx-auto font-light"
           >
             Premium commercial kitchen ventilation solutions engineered for
             performance and reliability
           </motion.p>
-        </div>
-
-        {/* Wave Divider */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg
-            viewBox="0 0 1440 120"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-full"
-          >
-            <path
-              d="M0 0L60 10C120 20 240 40 360 46.7C480 53 600 47 720 43.3C840 40 960 40 1080 46.7C1200 53 1320 67 1380 73.3L1440 80V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0V0Z"
-              fill="white"
-            />
-          </svg>
         </div>
       </section>
 
