@@ -8,6 +8,8 @@ import {
 import { AnimatePresence } from "framer-motion";
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
+import ProductDetail from "./pages/ProductDetail";
+
 import Products from "./pages/Products";
 import Clients from "./pages/Clients";
 import Enquiry from "./pages/Enquiry";
@@ -35,6 +37,14 @@ const AnimatedRoutes = () => {
           element={
             <PageTransition>
               <Products />
+            </PageTransition>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <PageTransition>
+              <ProductDetail />
             </PageTransition>
           }
         />

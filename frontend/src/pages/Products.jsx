@@ -1,243 +1,140 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import ProductCard from "../components/ProductCard";
-import { Filter, Grid3x3, List } from "lucide-react";
+import { Filter, Grid3x3, List, ChevronDown } from "lucide-react";
+import { products } from "../data/products";
 
 const Products = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [viewMode, setViewMode] = useState("grid"); // 'grid' or 'list'
+  const [systemFilter, setSystemFilter] = useState("All Systems");
+  const [gradeFilter, setGradeFilter] = useState("Standard");
+  const [viewMode, setViewMode] = useState("grid");
 
-  const categories = [
-    "All",
-    "Kitchen Exhaust Hoods",
-    "Fresh Air & Ventilation",
-    "HVAC Systems",
-    "Ducting & Accessories",
-  ];
+  const filteredProducts = products.filter((product) => {
+    // Filter by System (Application)
+    if (systemFilter !== "All Systems" && product.application !== systemFilter)
+      return false;
 
-  const products = [
-    {
-      id: 1,
-      title: "Island Exhaust Hood",
-      description:
-        "Premium stainless steel island exhaust hood with integrated lighting and high-capacity extraction.",
-      category: "Kitchen Exhaust Hoods",
-      image: null,
-    },
-    {
-      id: 2,
-      title: "Wall-Mounted Canopy Hood",
-      description:
-        "Professional wall-mounted canopy hood designed for heavy-duty commercial kitchen applications.",
-      category: "Kitchen Exhaust Hoods",
-      image: null,
-    },
-    {
-      id: 3,
-      title: "Backshelf Hood",
-      description:
-        "Compact backshelf hood ideal for limited space installations with efficient grease capture.",
-      category: "Kitchen Exhaust Hoods",
-      image: null,
-    },
-    {
-      id: 4,
-      title: "Fresh Air Handling Unit",
-      description:
-        "Advanced fresh air system with HEPA filtration and energy recovery ventilation.",
-      category: "Fresh Air & Ventilation",
-      image: null,
-    },
-    {
-      id: 5,
-      title: "Make-Up Air Unit",
-      description:
-        "High-efficiency make-up air unit to balance kitchen air pressure and improve comfort.",
-      category: "Fresh Air & Ventilation",
-      image: null,
-    },
-    {
-      id: 6,
-      title: "Ventilation Fan System",
-      description:
-        "Industrial-grade ventilation fans with variable speed control and low noise operation.",
-      category: "Fresh Air & Ventilation",
-      image: null,
-    },
-    {
-      id: 7,
-      title: "Commercial HVAC Package",
-      description:
-        "Complete HVAC solution with heating, cooling, and humidity control for commercial kitchens.",
-      category: "HVAC Systems",
-      image: null,
-    },
-    {
-      id: 8,
-      title: "Split AC System",
-      description:
-        "Energy-efficient split AC system designed for kitchen environments with grease-resistant components.",
-      category: "HVAC Systems",
-      image: null,
-    },
-    {
-      id: 9,
-      title: "Stainless Steel Ducting",
-      description:
-        "Premium grade stainless steel ducting with seamless joints and corrosion resistance.",
-      category: "Ducting & Accessories",
-      image: null,
-    },
-    {
-      id: 10,
-      title: "Grease Filters",
-      description:
-        "High-efficiency baffle grease filters with easy removal and dishwasher-safe design.",
-      category: "Ducting & Accessories",
-      image: null,
-    },
-    {
-      id: 11,
-      title: "Fire Suppression System",
-      description:
-        "Automated fire suppression system integrated with exhaust hood for maximum safety.",
-      category: "Ducting & Accessories",
-      image: null,
-    },
-    {
-      id: 12,
-      title: "UV Air Purification",
-      description:
-        "UV-C air purification system for eliminating odors and airborne contaminants.",
-      category: "Fresh Air & Ventilation",
-      image: null,
-    },
-  ];
+    // Filter by Grade (Standard vs High Volume)
+    // If 'Standard' is selected, show everything that is NOT High Volume?
+    // Or strictly 'Standard'? Valid strategy: If grade filter is 'High Volume', show only High Volume.
+    // If 'Standard', show Standard.
+    // However, in the design 'Standard' and 'High Volume' look like toggles. I'll implement as strict filter.
+    // Note: I defaulted grade to "Standard". If I want to show all by default, I need an "All" option or treat "Standard" as default.
+    // Let's assume the user wants to see everything initially?
+    // The image shows "Standard" selected. I'll stick to strict filtering for now.
+    // Actually, to make it user friendly, I'll add an 'All' option if needed, but the image implies binary or trinary choice.
+    // I'll default to displaying all if the UI allows, but the UI shows 'Standard' selected.
+    // Let's change the filter logic: Show 'Standard' by default.
 
-  const filteredProducts =
-    selectedCategory === "All"
-      ? products
-      : products.filter((product) => product.category === selectedCategory);
+    if (gradeFilter === "High Volume" && product.grade !== "High Volume")
+      return false;
+    if (gradeFilter === "Standard" && product.grade === "High Volume")
+      return false;
+
+    return true;
+  });
 
   return (
-    <div className="flex flex-col w-full overflow-hidden">
+    <div className="flex flex-col w-full overflow-hidden bg-slate-50 min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900 text-white pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-mesh opacity-40"></div>
-        <div className="absolute top-10 right-10 w-64 h-64 bg-cyan-500/20 rounded-full blur-3xl animate-float"></div>
-        <div
-          className="absolute bottom-10 left-10 w-80 h-80 bg-teal-500/10 rounded-full blur-3xl animate-float"
-          style={{ animationDelay: "2s" }}
-        ></div>
-
+      <section className="relative bg-slate-900 text-white pt-32 pb-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-mesh opacity-30"></div>
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/20 to-transparent"></div>
         <div className="container mx-auto px-4 relative z-10 text-center">
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-5xl md:text-7xl font-black mb-6"
+            className="text-5xl md:text-7xl font-black mb-6 tracking-tight"
           >
-            Our{" "}
-            <span className="gradient-text bg-gradient-to-r from-cyan-400 to-teal-300">
-              Products
-            </span>
+            Our <span className="text-blue-500">Products</span>
           </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-cyan-100 max-w-3xl mx-auto font-light"
-          >
-            Premium commercial kitchen ventilation solutions engineered for
-            performance and reliability
-          </motion.p>
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto font-light">
+            Engineered for performance, designed for efficiency. Explore our
+            premium range of ventilation solutions.
+          </p>
         </div>
       </section>
 
       {/* Products Section */}
-      <section className="section-padding bg-white">
-        <div className="container mx-auto px-4">
-          {/* Filter Bar */}
-          <div className="mb-12">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
+      <section className="py-12 px-4 md:px-8">
+        <div className="container mx-auto max-w-7xl">
+          {/* Controls Toolbar */}
+          <div className="bg-white p-4 rounded-xl shadow-sm border border-slate-200 mb-10 flex flex-col xl:flex-row justify-between items-center gap-6">
+            {/* Filters Group */}
+            <div className="flex flex-col md:flex-row items-center gap-6 w-full xl:w-auto overflow-x-auto pb-2 md:pb-0">
+              <span className="text-slate-400 font-bold tracking-wider text-xs uppercase flex-shrink-0">
+                Filters:
+              </span>
+
+              <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
+                {/* System Type Filter */}
+                <div className="bg-slate-100 p-1.5 rounded-lg flex items-center">
+                  {["All Systems", "Commercial", "Residential"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setSystemFilter(tab)}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
+                        systemFilter === tab
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Grade Filter */}
+                <div className="bg-slate-100 p-1.5 rounded-lg flex items-center">
+                  {["Standard", "High Volume"].map((tab) => (
+                    <button
+                      key={tab}
+                      onClick={() => setGradeFilter(tab)}
+                      className={`px-4 py-2 rounded-md text-sm font-semibold transition-all duration-200 ${
+                        gradeFilter === tab
+                          ? "bg-white text-blue-600 shadow-sm"
+                          : "text-slate-500 hover:text-slate-700 hover:bg-slate-200/50"
+                      }`}
+                    >
+                      {tab}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Sort & View */}
+            <div className="flex items-center gap-6 flex-shrink-0 w-full xl:w-auto justify-between xl:justify-end">
               <div className="flex items-center gap-3">
-                <Filter className="text-primary" size={24} />
-                <h2 className="text-2xl font-bold text-secondary-dark">
-                  Filter by Category
-                </h2>
-              </div>
-
-              {/* View Mode Toggle */}
-              <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg">
-                <button
-                  onClick={() => setViewMode("grid")}
-                  className={`p-2 rounded-md transition-all ${
-                    viewMode === "grid"
-                      ? "bg-white text-primary shadow-md"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <Grid3x3 size={20} />
-                </button>
-                <button
-                  onClick={() => setViewMode("list")}
-                  className={`p-2 rounded-md transition-all ${
-                    viewMode === "list"
-                      ? "bg-white text-primary shadow-md"
-                      : "text-gray-500 hover:text-gray-700"
-                  }`}
-                >
-                  <List size={20} />
-                </button>
+                <span className="text-slate-400 font-bold tracking-wider text-xs uppercase hidden sm:block">
+                  Sort:
+                </span>
+                <div className="relative group">
+                  <select className="appearance-none bg-slate-100 hover:bg-slate-200 border-none rounded-lg py-2.5 pl-4 pr-10 font-semibold text-sm text-slate-700 focus:ring-2 focus:ring-blue-500/20 cursor-pointer transition-colors min-w-[200px]">
+                    <option>Power (CFM) - High to Low</option>
+                    <option>Power (CFM) - Low to High</option>
+                    <option>Newest Arrival</option>
+                  </select>
+                  <ChevronDown
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none group-hover:text-slate-600 transition-colors"
+                    size={16}
+                  />
+                </div>
               </div>
             </div>
-
-            {/* Category Pills */}
-            <div className="flex flex-wrap gap-3">
-              {categories.map((category) => (
-                <motion.button
-                  key={category}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
-                    selectedCategory === category
-                      ? "bg-gradient-to-r from-primary to-blue-600 text-white shadow-lg"
-                      : "bg-slate-100 text-gray-700 hover:bg-slate-200"
-                  }`}
-                >
-                  {category}
-                </motion.button>
-              ))}
-            </div>
-          </div>
-
-          {/* Products Count */}
-          <div className="mb-8">
-            <p className="text-gray-600 text-lg">
-              Showing{" "}
-              <span className="font-bold text-primary">
-                {filteredProducts.length}
-              </span>{" "}
-              product{filteredProducts.length !== 1 ? "s" : ""}
-            </p>
           </div>
 
           {/* Products Grid */}
           <motion.div
             layout
-            className={
-              viewMode === "grid"
-                ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                : "flex flex-col gap-6"
-            }
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           >
             {filteredProducts.map((product, index) => (
               <ProductCard
                 key={product.id}
                 {...product}
                 delay={index * 0.1}
-                viewMode={viewMode}
+                viewMode="grid"
               />
             ))}
           </motion.div>
@@ -247,22 +144,33 @@ const Products = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="text-center py-20"
+              className="text-center py-32"
             >
-              <div className="text-6xl mb-4">🔍</div>
-              <h3 className="text-2xl font-bold text-gray-700 mb-2">
+              <div className="bg-slate-100 w-24 h-24 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Filter className="text-slate-300" size={40} />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-700 mb-2">
                 No products found
               </h3>
-              <p className="text-gray-500">
-                Try selecting a different category
+              <p className="text-slate-500">
+                Try adjusting your filters to find what you're looking for.
               </p>
+              <button
+                onClick={() => {
+                  setSystemFilter("All Systems");
+                  setGradeFilter("Standard");
+                }}
+                className="mt-6 text-blue-600 font-bold hover:underline"
+              >
+                Clear all filters
+              </button>
             </motion.div>
           )}
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-r from-primary via-blue-600 to-primary-dark text-white relative overflow-hidden">
+      <section className="py-20 bg-gradient-to-r from-blue-600 via-blue-500 to-blue-700 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAxMCAwIEwgMCAwIDAgMTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0id2hpdGUiIHN0cm9rZS1vcGFjaXR5PSIwLjA1IiBzdHJva2Utd2lkdGg9IjEiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JpZCkiLz48L3N2Zz4=')] opacity-30"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <motion.h2
@@ -292,13 +200,13 @@ const Products = () => {
           >
             <a
               href="/enquiry"
-              className="bg-white text-primary px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1"
+              className="bg-white text-blue-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-50 transition-all duration-300 shadow-xl hover:shadow-2xl hover:-translate-y-1"
             >
               Request Custom Quote
             </a>
             <a
               href="/contact"
-              className="border-2 border-white/30 backdrop-blur-sm bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-primary transition-all duration-300"
+              className="border-2 border-white/30 backdrop-blur-sm bg-white/10 text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-white hover:text-blue-600 transition-all duration-300"
             >
               Contact Us
             </a>
